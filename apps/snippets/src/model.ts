@@ -1,9 +1,5 @@
-export interface Snippet {
-  id: string;
-  title: string;
-  content: string;
-  updatedAt: string;
-}
+import type { Snippet } from "./document";
+export type { Snippet } from "./document";
 export interface Library {
   snippets: Snippet[];
   selectedId: string | null;

@@ -1,10 +1,16 @@
 import { expect, test } from "bun:test";
 import { launch } from "@gpuix/react/automation";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-test("a real native window launches and accepts a pointer action", async () => {
-  const app = await launch({ command: process.execPath, args: ["src/main.tsx"] });
+test("a real native window saves edits and restores them after process restart", async () => {
+  const directory = mkdtempSync(join(tmpdir(), "deskform-window-"));
+  const app = await launch({
+    command: process.execPath,
+    args: ["src/main.tsx"],
+    env: { DESKFORM_DATA_DIR: directory },
+  });
   try {
     await app.getByTestId("new-snippet").click();
     await app.getByTestId("title").fill("A useful command");
@@ -12,8 +18,32 @@ test("a real native window launches and accepts a pointer action", async () => {
     expect(await app.getByTestId("character-count").textContent()).toBe("13 characters");
     mkdirSync("output", { recursive: true });
     await app.screenshot({ path: "output/native-startup.png" });
+    const saved = JSON.parse(readFileSync(join(directory, "snippets.json"), "utf8"));
+    expect(saved.snippets[0].title).toBe("A useful command");
+    expect(saved.snippets[0].content).toBe("bun run check");
+    await app.close();
+    const restored = await launch({
+      command: process.execPath,
+      args: ["src/main.tsx"],
+      env: { DESKFORM_DATA_DIR: directory },
+    });
+    try {
+      expect(await restored.getByTestId("character-count").textContent()).toBe("13 characters");
+      expect(await restored.getByTestId(`snippet-${saved.selectedId}`).textContent()).toBe(
+        "A useful commandbun run check",
+      );
+      await restored.getByTestId("content").press("end");
+      await restored.getByTestId("content").press("x");
+      expect(await restored.getByTestId("character-count").textContent()).toBe("14 characters");
+      expect(
+        JSON.parse(readFileSync(join(directory, "snippets.json"), "utf8")).snippets[0].content,
+      ).toBe("bun run checkx");
+    } finally {
+      await restored.close();
+    }
   } finally {
     await app.close();
+    rmSync(directory, { recursive: true, force: true });
   }
 }, 20_000);
 

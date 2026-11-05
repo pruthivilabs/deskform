@@ -22,6 +22,7 @@
         "@gpuix/native": "0.11.0",
         "@gpuix/react": "0.11.0",
         "react": "19.2.9",
+        "zod": "4.6.7",
       },
     },
     "packages/runtime": {

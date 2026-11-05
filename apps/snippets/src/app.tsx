@@ -2,11 +2,15 @@ import { createCommands } from "@deskform/runtime";
 import { color, radius, space, type } from "@deskform/tokens";
 import { Button, Input, Row, Shell, Stack, Text, Textarea, Toolbar } from "@deskform/ui";
 import { Button as NativeButton, useGpuixRequired, type PublicInstance } from "@gpuix/react";
-import { useEffect, useReducer, useRef } from "react";
-import { emptyLibrary, newSnippet, reduceLibrary, visibleSnippets, type Library } from "./model";
+import { useEffect, useState, useSyncExternalStore, useRef } from "react";
+import { newSnippet, visibleSnippets } from "./model";
+import { SnippetStore } from "./store";
 
-export function App({ initialLibrary = emptyLibrary }: { initialLibrary?: Library }) {
-  const [library, dispatch] = useReducer(reduceLibrary, initialLibrary);
+export function App({ store }: { store?: SnippetStore }) {
+  const [activeStore] = useState(() => store ?? new SnippetStore());
+  const { library, status } = useSyncExternalStore(activeStore.subscribe, activeStore.getSnapshot);
+  const dispatch = activeStore.dispatch;
+  const blocked = status.kind === "blocked";
   const renderer = useGpuixRequired();
   const searchRef = useRef<PublicInstance>(null);
   const titleRef = useRef<PublicInstance>(null);
@@ -22,8 +26,9 @@ export function App({ initialLibrary = emptyLibrary }: { initialLibrary?: Librar
     if (searchRef.current) renderer.focusElement?.(searchRef.current.id);
   };
   const commands = createCommands([
-    { id: "create", shortcut: { key: "n" }, run: create },
+    { id: "create", shortcut: { key: "n" }, enabled: !blocked, run: create },
     { id: "search", shortcut: { key: "f" }, run: focusSearch },
+    { id: "save", shortcut: { key: "s" }, enabled: !blocked, run: activeStore.retrySave },
   ]);
   useEffect(() => {
     if (!focusNew.current || !titleRef.current) return;
@@ -54,7 +59,12 @@ export function App({ initialLibrary = emptyLibrary }: { initialLibrary?: Librar
           value={library.query}
           onValueChange={(query) => dispatch({ type: "search", query })}
         />
-        <Button testId="new-snippet" variant="primary" onPress={() => commands.run("create")}>
+        <Button
+          testId="new-snippet"
+          disabled={blocked}
+          variant="primary"
+          onPress={() => commands.run("create")}
+        >
           New snippet
         </Button>
       </Stack>
@@ -141,9 +151,25 @@ export function App({ initialLibrary = emptyLibrary }: { initialLibrary?: Librar
         </Text>
         <div style={{ flexGrow: 1 }} />
         <Text size="caption" tone="faint">
-          Local. Simple. Yours.
+          {status.kind === "saved"
+            ? "Saved locally"
+            : status.kind === "temporary"
+              ? "Temporary session"
+              : "Not saved"}
         </Text>
       </Toolbar>
+      {(status.kind === "error" || status.kind === "blocked") && (
+        <Row style={{ padding: space.lg, backgroundColor: color.surface }}>
+          <Text testId="save-error" tone="danger" style={{ flexGrow: 1 }}>
+            {status.message}
+          </Text>
+          {status.kind === "error" && (
+            <Button testId="retry-save" onPress={activeStore.retrySave}>
+              Retry save
+            </Button>
+          )}
+        </Row>
+      )}
       {selected ? (
         <Stack key={selected.id} gap={space.xl} style={{ padding: space.xl, flexGrow: 1 }}>
           <Stack gap={space.sm}>
@@ -213,7 +239,9 @@ export function App({ initialLibrary = emptyLibrary }: { initialLibrary?: Librar
         >
           <Text size="title">Keep the useful bits.</Text>
           <Text tone="muted">A quiet home for commands, notes, and ideas.</Text>
-          <Button onPress={create}>Create your first snippet</Button>
+          <Button disabled={blocked} onPress={create}>
+            Create your first snippet
+          </Button>
         </Stack>
       )}
     </Shell>
