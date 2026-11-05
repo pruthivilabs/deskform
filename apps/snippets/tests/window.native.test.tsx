@@ -1,10 +1,13 @@
 import { expect, test } from "bun:test";
+import { clipboard } from "@deskform/runtime";
 import { launch } from "@gpuix/react/automation";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 test("a real native window saves edits and restores them after process restart", async () => {
+  const readClipboard = async () => new Response(Bun.spawn(["/usr/bin/pbpaste"]).stdout).text();
+  const previousClipboard = await readClipboard();
   const directory = mkdtempSync(join(tmpdir(), "deskform-window-"));
   const app = await launch({
     command: process.execPath,
@@ -18,6 +21,14 @@ test("a real native window saves edits and restores them after process restart",
     expect(await app.getByTestId("character-count").textContent()).toBe("13 characters");
     mkdirSync("output", { recursive: true });
     await app.screenshot({ path: "output/native-startup.png" });
+    await app.getByTestId("copy-snippet").click();
+    let copied = "";
+    for (let attempt = 0; attempt < 40; attempt++) {
+      copied = await readClipboard();
+      if (copied === "bun run check") break;
+      await Bun.sleep(25);
+    }
+    expect(copied).toBe("bun run check");
     const saved = JSON.parse(readFileSync(join(directory, "snippets.json"), "utf8"));
     expect(saved.snippets[0].title).toBe("A useful command");
     expect(saved.snippets[0].content).toBe("bun run check");
@@ -38,11 +49,18 @@ test("a real native window saves edits and restores them after process restart",
       expect(
         JSON.parse(readFileSync(join(directory, "snippets.json"), "utf8")).snippets[0].content,
       ).toBe("bun run checkx");
+      await restored.getByTestId("delete-snippet").click();
+      await restored.getByTestId("confirm-delete").click();
+      expect(await restored.getByTestId("title").count()).toBe(0);
+      expect(JSON.parse(readFileSync(join(directory, "snippets.json"), "utf8")).snippets).toEqual(
+        [],
+      );
     } finally {
       await restored.close();
     }
   } finally {
     await app.close();
+    await clipboard.write(previousClipboard);
     rmSync(directory, { recursive: true, force: true });
   }
 }, 20_000);

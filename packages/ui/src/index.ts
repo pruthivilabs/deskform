@@ -4,3 +4,4 @@ export { Row, Stack, type LayoutProps } from "./layout";
 export { Text, type TextProps } from "./text";
 export { style } from "./style";
 export { Shell, Toolbar, type ShellProps } from "./shell";
+export { ConfirmDialog, type ConfirmDialogProps } from "./confirm-dialog";

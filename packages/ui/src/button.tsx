@@ -27,6 +27,7 @@ export function Button({
     <NativeButton
       {...props}
       aria-label={props["aria-label"] ?? children}
+      aria-disabled={disabled || undefined}
       disabled={disabled}
       onClick={onPress}
       style={style(

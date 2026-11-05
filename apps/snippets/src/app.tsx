@@ -1,12 +1,32 @@
-import { createCommands } from "@deskform/runtime";
+import { clipboard, createCommands } from "@deskform/runtime";
 import { color, radius, space, type } from "@deskform/tokens";
-import { Button, Input, Row, Shell, Stack, Text, Textarea, Toolbar } from "@deskform/ui";
+import {
+  Button,
+  ConfirmDialog,
+  Input,
+  Row,
+  Shell,
+  Stack,
+  Text,
+  Textarea,
+  Toolbar,
+} from "@deskform/ui";
 import { Button as NativeButton, useGpuixRequired, type PublicInstance } from "@gpuix/react";
 import { useEffect, useState, useSyncExternalStore, useRef } from "react";
 import { newSnippet, visibleSnippets } from "./model";
 import { SnippetStore } from "./store";
 
-export function App({ store }: { store?: SnippetStore }) {
+export function App({
+  store,
+  copyText = clipboard.write,
+}: {
+  store?: SnippetStore;
+  copyText?: (text: string) => Promise<void>;
+}) {
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [copyStatus, setCopyStatus] = useState<
+    { kind: "idle" | "copying" | "copied" } | { kind: "error"; message: string }
+  >({ kind: "idle" });
   const [activeStore] = useState(() => store ?? new SnippetStore());
   const { library, status } = useSyncExternalStore(activeStore.subscribe, activeStore.getSnapshot);
   const dispatch = activeStore.dispatch;
@@ -25,10 +45,47 @@ export function App({ store }: { store?: SnippetStore }) {
   const focusSearch = () => {
     if (searchRef.current) renderer.focusElement?.(searchRef.current.id);
   };
+  const copy = async () => {
+    if (!selected || copyStatus.kind === "copying") return;
+    setCopyStatus({ kind: "copying" });
+    try {
+      await copyText(selected.content);
+      setCopyStatus({ kind: "copied" });
+    } catch (error) {
+      setCopyStatus({
+        kind: "error",
+        message: error instanceof Error ? error.message : String(error),
+      });
+    }
+  };
+  useEffect(() => {
+    setCopyStatus({ kind: "idle" });
+  }, [selected?.id, selected?.content]);
   const commands = createCommands([
-    { id: "create", shortcut: { key: "n" }, enabled: !blocked, run: create },
-    { id: "search", shortcut: { key: "f" }, run: focusSearch },
-    { id: "save", shortcut: { key: "s" }, enabled: !blocked, run: activeStore.retrySave },
+    { id: "create", shortcut: { key: "n" }, enabled: !blocked && !deleteTarget, run: create },
+    { id: "search", shortcut: { key: "f" }, enabled: !deleteTarget, run: focusSearch },
+    {
+      id: "save",
+      shortcut: { key: "s" },
+      enabled: !blocked && !deleteTarget,
+      run: activeStore.retrySave,
+    },
+    {
+      id: "copy",
+      shortcut: { key: "c", shift: true },
+      enabled: !!selected && !deleteTarget,
+      run: () => {
+        void copy();
+      },
+    },
+    {
+      id: "delete",
+      shortcut: { key: "backspace", shift: true },
+      enabled: !!selected && !deleteTarget,
+      run: () => {
+        if (selected) setDeleteTarget(selected.id);
+      },
+    },
   ]);
   useEffect(() => {
     if (!focusNew.current || !titleRef.current) return;
@@ -45,7 +102,7 @@ export function App({ store }: { store?: SnippetStore }) {
             A little library of useful things
           </Text>
         </Stack>
-        <Text size="caption" tone="muted">
+        <Text testId="library-count" size="caption" tone="muted">
           {String(library.snippets.length)}
         </Text>
       </Toolbar>
@@ -157,7 +214,30 @@ export function App({ store }: { store?: SnippetStore }) {
               ? "Temporary session"
               : "Not saved"}
         </Text>
+        {selected && (
+          <>
+            <Button
+              testId="copy-snippet"
+              onPress={() => commands.run("copy")}
+              disabled={copyStatus.kind === "copying"}
+            >
+              {copyStatus.kind === "copied"
+                ? "Copied"
+                : copyStatus.kind === "copying"
+                  ? "Copying…"
+                  : "Copy content"}
+            </Button>
+            <Button testId="delete-snippet" variant="ghost" onPress={() => commands.run("delete")}>
+              Delete
+            </Button>
+          </>
+        )}
       </Toolbar>
+      {copyStatus.kind === "error" && (
+        <Text testId="copy-error" tone="danger" style={{ padding: space.lg }}>
+          {copyStatus.message}
+        </Text>
+      )}
       {(status.kind === "error" || status.kind === "blocked") && (
         <Row style={{ padding: space.lg, backgroundColor: color.surface }}>
           <Text testId="save-error" tone="danger" style={{ flexGrow: 1 }}>
@@ -244,6 +324,20 @@ export function App({ store }: { store?: SnippetStore }) {
           </Button>
         </Stack>
       )}
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title="Delete this snippet?"
+        description="This removes the snippet from your local library. This action cannot be undone."
+        confirmLabel="Delete snippet"
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
+        onConfirm={() => {
+          if (deleteTarget) dispatch({ type: "delete", id: deleteTarget });
+          setDeleteTarget(null);
+          focusSearch();
+        }}
+      />
     </Shell>
   );
 }

@@ -1,5 +1,11 @@
 import { expect, it } from "vite-plus/test";
-import { emptyLibrary, reduceLibrary, visibleSnippets, type Snippet } from "../src/model";
+import {
+  emptyLibrary,
+  reduceLibrary,
+  visibleSnippets,
+  type Library,
+  type Snippet,
+} from "../src/model";
 
 const first: Snippet = {
   id: "one",
@@ -39,4 +45,15 @@ it("searches title and body using all case-insensitive terms and preserves the d
   ]);
   expect(visibleSnippets({ ...state, query: "[.*" })).toEqual([]);
   expect(state.snippets).toHaveLength(2);
+});
+
+it("deletes the selected item, chooses its neighbor and handles an empty library", () => {
+  const second = { ...first, id: "two", title: "Second" };
+  let state: Library = { snippets: [first, second], selectedId: first.id, query: "" };
+  state = reduceLibrary(state, { type: "delete", id: first.id });
+  expect(state.snippets).toEqual([second]);
+  expect(state.selectedId).toBe("two");
+  state = reduceLibrary(state, { type: "delete", id: second.id });
+  expect(state.snippets).toEqual([]);
+  expect(state.selectedId).toBeNull();
 });
