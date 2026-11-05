@@ -4,12 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "tsrs --noEmit --fast -p tsconfig.json",
-    "dev": "bun --hot src/main.tsx",
+    "typecheck": "tsrs --noEmit --fast -p tsconfig.json && tsrs --noEmit --fast -p devtools/tsconfig.json",
+    "dev": "DESKFORM_DEVTOOLS_FILE=.deskform/toolbar.json bun --hot src/main.tsx",
     "start": "bun src/main.tsx",
-    "build": "bun build --compile --minify src/main.tsx --outfile dist/deskform-snippets",
+    "build": "bun scripts/build.ts",
     "test:native": "bun test tests/*.native.test.tsx",
-    "test": "vp test run"
+    "test": "vp test run",
+    "dev:tools": "vp dev --config devtools/vite.config.ts",
+    "test:production": "bun test tests/production.test.tsx",
+    "test:devtools": "playwright test --config devtools/playwright.config.ts",
+    "test:devtools:install": "playwright install chromium --no-shell"
   },
   "dependencies": {
     "@deskform/runtime": "workspace:*",
@@ -19,5 +23,12 @@
     "@gpuix/react": "0.11.0",
     "react": "19.2.9",
     "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/react-dom": "19.3.0",
+    "dialkit": "2.1.0",
+    "motion": "14.9.1",
+    "react-dom": "19.2.9"
   }
 }

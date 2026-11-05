@@ -15,6 +15,7 @@ import { Button as NativeButton, useGpuixRequired, type PublicInstance } from "@
 import { useEffect, useState, useSyncExternalStore, useRef } from "react";
 import { newSnippet, visibleSnippets } from "./model";
 import { SnippetStore } from "./store";
+import { useToolbarTuning } from "./toolbar-tuning";
 
 export function App({
   store,
@@ -27,6 +28,13 @@ export function App({
   const [copyStatus, setCopyStatus] = useState<
     { kind: "idle" | "copying" | "copied" } | { kind: "error"; message: string }
   >({ kind: "idle" });
+  const toolbar = useToolbarTuning();
+  const toolbarStyle = {
+    minHeight: toolbar.height,
+    gap: toolbar.gap,
+    paddingLeft: toolbar.padding,
+    paddingRight: toolbar.padding,
+  };
   const [activeStore] = useState(() => store ?? new SnippetStore());
   const { library, status } = useSyncExternalStore(activeStore.subscribe, activeStore.getSnapshot);
   const dispatch = activeStore.dispatch;
@@ -95,7 +103,7 @@ export function App({
 
   const sidebar = (
     <>
-      <Toolbar style={{ paddingLeft: space.lg, paddingRight: space.lg }}>
+      <Toolbar style={toolbarStyle}>
         <Stack gap={0} style={{ flexGrow: 1 }}>
           <Text size="label">Snippets</Text>
           <Text size="caption" tone="faint">
@@ -117,6 +125,7 @@ export function App({
           onValueChange={(query) => dispatch({ type: "search", query })}
         />
         <Button
+          style={{ backgroundColor: toolbar.accent }}
           testId="new-snippet"
           disabled={blocked}
           variant="primary"
@@ -126,7 +135,7 @@ export function App({
         </Button>
       </Stack>
       <Stack
-        role="listbox"
+        role="navigation"
         aria-label="Snippets"
         gap={space.xs}
         style={{ flexGrow: 1, overflow: "scroll", padding: space.sm }}
@@ -135,7 +144,6 @@ export function App({
           <NativeButton
             key={snippet.id}
             testId={`snippet-${snippet.id}`}
-            role="option"
             aria-label={snippet.title || "Untitled snippet"}
             aria-selected={snippet.id === library.selectedId}
             ref={(instance) => {
@@ -202,7 +210,7 @@ export function App({
 
   return (
     <Shell sidebar={sidebar} onKeyDown={commands.onKeyDown}>
-      <Toolbar>
+      <Toolbar testId="editor-toolbar" style={toolbarStyle}>
         <Text size="caption" tone="muted">
           {selected ? "PLAIN TEXT" : "YOUR PERSONAL LIBRARY"}
         </Text>

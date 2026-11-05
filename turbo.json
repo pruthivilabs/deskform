@@ -14,11 +14,13 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": ["DESKFORM_DATA_DIR"]
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "cache": false
     },
     "test:native": {
       "cache": false,
@@ -26,6 +28,19 @@
     },
     "test": {
       "dependsOn": ["^test"],
+      "outputs": []
+    },
+    "dev:tools": {
+      "cache": false,
+      "persistent": true
+    },
+    "test:production": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "outputs": []
+    },
+    "test:devtools": {
+      "cache": false,
       "outputs": []
     }
   }

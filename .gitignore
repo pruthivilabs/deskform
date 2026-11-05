@@ -11,3 +11,6 @@ output/
 .env.*
 !.env.example
 *.tsbuildinfo
+.playwright-cli/
+test-results/
+playwright-report/

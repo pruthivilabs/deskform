@@ -88,3 +88,35 @@ render(<text testId="reload-label" style={{color:"#ffffff",fontSize:20}}>${label
     rmSync(directory, { recursive: true, force: true });
   }
 }, 20_000);
+
+test("development toolbar values reach the real native window and invalid values fall back", async () => {
+  const directory = mkdtempSync(join(tmpdir(), "deskform-toolbar-"));
+  const path = join(directory, "toolbar.json");
+  writeFileSync(path, JSON.stringify({ height: 64, gap: 8, padding: 24, accent: "#b9c8ff" }));
+  const app = await launch({
+    command: process.execPath,
+    args: ["src/main.tsx"],
+    env: { NODE_ENV: "development", DESKFORM_DATA_DIR: directory, DESKFORM_DEVTOOLS_FILE: path },
+  });
+  try {
+    expect((await app.getByTestId("editor-toolbar").bounds()).height).toBe(64);
+    writeFileSync(path, JSON.stringify({ height: 80, gap: 12, padding: 20, accent: "#aaddcc" }));
+    let height = 0;
+    for (let attempt = 0; attempt < 40; attempt++) {
+      height = (await app.getByTestId("editor-toolbar").bounds()).height;
+      if (height === 80) break;
+      await Bun.sleep(50);
+    }
+    expect(height).toBe(80);
+    writeFileSync(path, JSON.stringify({ height: -500 }));
+    for (let attempt = 0; attempt < 40; attempt++) {
+      height = (await app.getByTestId("editor-toolbar").bounds()).height;
+      if (height === 64) break;
+      await Bun.sleep(50);
+    }
+    expect(height).toBe(64);
+  } finally {
+    await app.close();
+    rmSync(directory, { recursive: true, force: true });
+  }
+}, 20_000);
