@@ -23,6 +23,10 @@
     "test:native": {
       "cache": false,
       "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^test"],
+      "outputs": []
     }
   }
 }

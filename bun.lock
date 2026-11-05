@@ -16,8 +16,18 @@
       "name": "@deskform/snippets",
       "version": "0.1.0",
       "dependencies": {
+        "@deskform/runtime": "workspace:*",
         "@deskform/tokens": "workspace:*",
         "@deskform/ui": "workspace:*",
+        "@gpuix/native": "0.11.0",
+        "@gpuix/react": "0.11.0",
+        "react": "19.2.9",
+      },
+    },
+    "packages/runtime": {
+      "name": "@deskform/runtime",
+      "version": "0.1.0",
+      "dependencies": {
         "@gpuix/native": "0.11.0",
         "@gpuix/react": "0.11.0",
         "react": "19.2.9",
@@ -49,6 +59,8 @@
     "@babel/runtime": ["@babel/runtime@7.29.13", "", {}, "sha512-v+oN26xP4YIlQsbQ/CbTH1WG5m/l/DjKKZNy/Kp3f/AFvbgt7Em/D0FeMM3O2hX0YzeN2M16W8lOpyhIkfCBcQ=="],
 
     "@blazediff/core": ["@blazediff/core@1.10.0", "", {}, "sha512-AOQff0zgR7cGsZL+4E7hVkmujoPUpm0J9xzWGWZj5wCjd3gmxESXAPfKyuzs93VdpQNFhHlBhfOjrcZ+XTERtQ=="],
+
+    "@deskform/runtime": ["@deskform/runtime@workspace:packages/runtime"],
 
     "@deskform/snippets": ["@deskform/snippets@workspace:apps/snippets"],
 

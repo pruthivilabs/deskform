@@ -7,7 +7,9 @@ test("a real native window launches and accepts a pointer action", async () => {
   const app = await launch({ command: process.execPath, args: ["src/main.tsx"] });
   try {
     await app.getByTestId("new-snippet").click();
-    expect(await app.getByTestId("count").textContent()).toBe("Created: 1");
+    await app.getByTestId("title").fill("A useful command");
+    await app.getByTestId("content").fill("bun run check");
+    expect(await app.getByTestId("character-count").textContent()).toBe("13 characters");
     mkdirSync("output", { recursive: true });
     await app.screenshot({ path: "output/native-startup.png" });
   } finally {

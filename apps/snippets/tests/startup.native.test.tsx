@@ -9,9 +9,16 @@ test("the native app responds to pointer and keyboard activation", async () => {
   try {
     root.render(<App />);
     await app.getByTestId("new-snippet").click();
-    expect(await app.getByTestId("count").textContent()).toBe("Created: 1");
-    await app.getByTestId("new-snippet").press("enter");
-    expect(await app.getByTestId("count").textContent()).toBe("Created: 2");
+    await app.getByTestId("title").fill("Deploy command");
+    await app.getByTestId("content").fill("bun run build");
+    expect(await app.getByTestId("character-count").textContent()).toBe("13 characters");
+    await app.getByTestId("content").press("cmd-n");
+    expect(await app.getByTestId("character-count").textContent()).toBe("0 characters");
+    expect(root.renderer.getFocusedElementId()).toBe((await app.getByTestId("title").element()).id);
+    await app.getByTestId("title").press("cmd-f");
+    expect(root.renderer.getFocusedElementId()).toBe(
+      (await app.getByTestId("search").element()).id,
+    );
   } finally {
     await app.close();
     root.unmount();
