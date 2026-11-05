@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 import { connectTest } from "@gpuix/react/automation";
 import { createTestRoot } from "@gpuix/react/testing";
 import { App } from "../src/app";
+import { SnippetStore } from "../src/store";
 
 test("users create, search, select, copy and confirm deletion through native controls", async () => {
   const root = createTestRoot({ width: 1000, height: 700, keyboardFocusDim: false });
@@ -72,6 +73,33 @@ test.each([
       expect(box.x + box.width).toBeLessThanOrEqual(size.width);
       expect(box.y + box.height).toBeLessThanOrEqual(size.height);
     }
+  } finally {
+    await app.close();
+    root.unmount();
+  }
+});
+
+test("a delayed copy does not mark a newly selected snippet as copied", async () => {
+  const root = createTestRoot({ width: 1000, height: 700, keyboardFocusDim: false });
+  const app = await connectTest(root.renderer);
+  const store = new SnippetStore();
+  let finishCopy: (() => void) | undefined;
+  const copyText = () =>
+    new Promise<void>((resolve) => {
+      finishCopy = resolve;
+    });
+  try {
+    root.render(<App store={store} copyText={copyText} />);
+    await app.getByTestId("new-snippet").click();
+    await app.getByTestId("content").fill("first content");
+    await app.getByTestId("copy-snippet").click();
+    await app.getByTestId("new-snippet").click();
+    await app.getByTestId("content").fill("second content");
+    if (!finishCopy) throw new Error("Copy did not start");
+    finishCopy();
+    await Bun.sleep(0);
+    root.render(<App store={store} copyText={copyText} />);
+    expect(await app.getByTestId("copy-snippet").textContent()).toBe("Copy content");
   } finally {
     await app.close();
     root.unmount();

@@ -44,6 +44,7 @@ export function App({
   const titleRef = useRef<PublicInstance>(null);
   const focusNew = useRef(false);
   const rows = useRef(new Map<string, PublicInstance>());
+  const copying = useRef(false);
   const visible = visibleSnippets(library);
   const selected = library.snippets.find((snippet) => snippet.id === library.selectedId);
   const create = () => {
@@ -54,20 +55,25 @@ export function App({
     if (searchRef.current) renderer.focusElement?.(searchRef.current.id);
   };
   const copy = async () => {
-    if (!selected || copyStatus.kind === "copying") return;
+    if (!selected || copying.current) return;
+    const { id, content } = selected;
+    copying.current = true;
     setCopyStatus({ kind: "copying" });
+    let result: { kind: "copied" } | { kind: "error"; message: string } = { kind: "copied" };
     try {
-      await copyText(selected.content);
-      setCopyStatus({ kind: "copied" });
+      await copyText(content);
     } catch (error) {
-      setCopyStatus({
-        kind: "error",
-        message: error instanceof Error ? error.message : String(error),
-      });
+      result = { kind: "error", message: error instanceof Error ? error.message : String(error) };
     }
+    copying.current = false;
+    const current = activeStore.getSnapshot().library;
+    const unchanged =
+      current.selectedId === id &&
+      current.snippets.find((snippet) => snippet.id === id)?.content === content;
+    setCopyStatus(unchanged ? result : { kind: "idle" });
   };
   useEffect(() => {
-    setCopyStatus({ kind: "idle" });
+    if (!copying.current) setCopyStatus({ kind: "idle" });
   }, [selected?.id, selected?.content]);
   const commands = createCommands([
     { id: "create", shortcut: { key: "n" }, enabled: !blocked && !deleteTarget, run: create },
