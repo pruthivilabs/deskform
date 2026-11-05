@@ -1,3 +1,4 @@
+import { color, radius, space, type } from "@deskform/tokens";
 import { Button } from "@gpuix/react";
 import { useState } from "react";
 
@@ -7,27 +8,27 @@ export function App() {
     <div
       style={{
         flexDirection: "column",
-        padding: 32,
-        gap: 20,
-        backgroundColor: "#181b22",
+        padding: space.xxl,
+        gap: space.lg,
+        backgroundColor: color.canvas,
         width: "100%",
         height: "100%",
       }}
     >
-      <text style={{ color: "#f4f5f7", fontSize: 24 }}>Deskform Snippets</text>
-      <text style={{ color: "#a7adbb", fontSize: 14 }}>
+      <text style={{ color: color.text, ...type.title }}>Deskform Snippets</text>
+      <text style={{ color: color.muted, ...type.body }}>
         Your plain-text snippets, close at hand.
       </text>
       <Button
         testId="new-snippet"
         aria-label="Create a snippet"
         onClick={() => setCount((value) => value + 1)}
-        style={{ padding: 12, backgroundColor: "#b8c7ff", borderRadius: 8 }}
+        style={{ padding: space.md, backgroundColor: color.accent, borderRadius: radius.md }}
       >
-        <text style={{ color: "#172448", fontSize: 14 }}>Create a snippet</text>
+        <text style={{ color: color.onAccent, ...type.label }}>Create a snippet</text>
       </Button>
-      <text testId="count" style={{ color: "#f4f5f7", fontSize: 14 }}>
-        Created: {count}
+      <text testId="count" style={{ color: color.text, ...type.body }}>
+        {`Created: ${count}`}
       </text>
     </div>
   );
