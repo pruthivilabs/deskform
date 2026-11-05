@@ -1,0 +1,13 @@
+node_modules/
+.turbo/
+.vite/
+dist/
+coverage/
+output/
+.deskform/
+.DS_Store
+.delta/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo

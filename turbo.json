@@ -1,0 +1,9 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "globalDependencies": ["tsconfig.base.json", "vite.config.ts"],
+  "tasks": {
+    "//#check:repo": { "outputs": [] },
+    "//#typecheck:repo": { "outputs": [] },
+    "typecheck": { "dependsOn": ["^typecheck"], "outputs": [] }
+  }
+}

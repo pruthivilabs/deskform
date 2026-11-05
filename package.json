@@ -1,0 +1,30 @@
+{
+  "name": "deskform",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "check": "turbo run check:repo typecheck typecheck:repo",
+    "check:repo": "vp check",
+    "typecheck:repo": "tsrs --noEmit --fast -p tsconfig.json",
+    "format": "vp fmt"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.4",
+    "@types/react": "19.3.0",
+    "tsrs": "0.22.0-ts7.1.0-beta",
+    "turbo": "2.11.10",
+    "vite-plus": "1.5.0"
+  },
+  "overrides": {
+    "@gpuix/native": "0.11.0"
+  },
+  "engines": {
+    "bun": ">=1.4.3",
+    "node": ">=26.0.0"
+  },
+  "packageManager": "bun@1.4.3"
+}
