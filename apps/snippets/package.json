@@ -4,7 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "typecheck": "tsrs --noEmit --fast -p tsconfig.json"
+    "typecheck": "tsrs --noEmit --fast -p tsconfig.json",
+    "dev": "bun --hot src/main.tsx",
+    "start": "bun src/main.tsx",
+    "build": "bun build --compile --minify src/main.tsx --outfile dist/deskform-snippets",
+    "test:native": "bun test tests/*.native.test.tsx"
   },
   "dependencies": {
     "@gpuix/native": "0.11.0",

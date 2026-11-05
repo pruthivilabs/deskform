@@ -2,8 +2,27 @@
   "$schema": "https://turborepo.com/schema.json",
   "globalDependencies": ["tsconfig.base.json", "vite.config.ts"],
   "tasks": {
-    "//#check:repo": { "outputs": [] },
-    "//#typecheck:repo": { "outputs": [] },
-    "typecheck": { "dependsOn": ["^typecheck"], "outputs": [] }
+    "//#check:repo": {
+      "outputs": []
+    },
+    "//#typecheck:repo": {
+      "outputs": []
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "test:native": {
+      "cache": false,
+      "outputs": []
+    }
   }
 }

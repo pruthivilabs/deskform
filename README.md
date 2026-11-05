@@ -5,6 +5,9 @@ A small framework and starter for native desktop utilities with React, TypeScrip
 ```sh
 bun install --frozen-lockfile
 bun run check
+bun run dev
+bun run test:native
+bun run build
 ```
 
-See [architecture](docs/architecture.md) and [development](docs/development.md). The native workflow is added in the next milestone.
+See [architecture](docs/architecture.md) and [development](docs/development.md).
