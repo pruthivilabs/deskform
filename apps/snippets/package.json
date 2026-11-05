@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@deskform/tokens": "workspace:*",
+    "@deskform/ui": "workspace:*",
     "@gpuix/native": "0.11.0",
     "@gpuix/react": "0.11.0",
     "react": "19.2.9"

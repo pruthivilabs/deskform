@@ -1,35 +1,39 @@
-import { color, radius, space, type } from "@deskform/tokens";
-import { Button } from "@gpuix/react";
+import { color, space } from "@deskform/tokens";
+import { Button, Input, Stack, Text, Textarea } from "@deskform/ui";
 import { useState } from "react";
 
 export function App() {
   const [count, setCount] = useState(0);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   return (
-    <div
-      style={{
-        flexDirection: "column",
-        padding: space.xxl,
-        gap: space.lg,
-        backgroundColor: color.canvas,
-        width: "100%",
-        height: "100%",
-      }}
+    <Stack
+      gap={space.lg}
+      style={{ padding: space.xxl, backgroundColor: color.canvas, width: "100%", height: "100%" }}
     >
-      <text style={{ color: color.text, ...type.title }}>Deskform Snippets</text>
-      <text style={{ color: color.muted, ...type.body }}>
-        Your plain-text snippets, close at hand.
-      </text>
+      <Text size="title">Deskform Snippets</Text>
+      <Text tone="muted">Your plain-text snippets, close at hand.</Text>
       <Button
         testId="new-snippet"
-        aria-label="Create a snippet"
-        onClick={() => setCount((value) => value + 1)}
-        style={{ padding: space.md, backgroundColor: color.accent, borderRadius: radius.md }}
+        variant="primary"
+        onPress={() => setCount((value) => value + 1)}
+        style={{ alignSelf: "flex-start" }}
       >
-        <text style={{ color: color.onAccent, ...type.label }}>Create a snippet</text>
+        Create a snippet
       </Button>
-      <text testId="count" style={{ color: color.text, ...type.body }}>
-        {`Created: ${count}`}
-      </text>
-    </div>
+      <Input
+        aria-label="Snippet title"
+        placeholder="Untitled snippet"
+        value={title}
+        onValueChange={setTitle}
+      />
+      <Textarea
+        aria-label="Snippet content"
+        placeholder="Keep something useful…"
+        value={content}
+        onValueChange={setContent}
+      />
+      <Text testId="count">{`Created: ${count}`}</Text>
+    </Stack>
   );
 }

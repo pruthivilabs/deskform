@@ -17,6 +17,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@deskform/tokens": "workspace:*",
+        "@deskform/ui": "workspace:*",
         "@gpuix/native": "0.11.0",
         "@gpuix/react": "0.11.0",
         "react": "19.2.9",
@@ -25,6 +26,16 @@
     "packages/tokens": {
       "name": "@deskform/tokens",
       "version": "0.1.0",
+    },
+    "packages/ui": {
+      "name": "@deskform/ui",
+      "version": "0.1.0",
+      "dependencies": {
+        "@deskform/tokens": "workspace:*",
+        "@gpuix/native": "0.11.0",
+        "@gpuix/react": "0.11.0",
+        "react": "19.2.9",
+      },
     },
   },
   "overrides": {
@@ -42,6 +53,8 @@
     "@deskform/snippets": ["@deskform/snippets@workspace:apps/snippets"],
 
     "@deskform/tokens": ["@deskform/tokens@workspace:packages/tokens"],
+
+    "@deskform/ui": ["@deskform/ui@workspace:packages/ui"],
 
     "@gpuix/native": ["@gpuix/native@0.11.0", "", { "dependencies": { "eventsource-parser": "^4.1.0", "zod": "^4.4.3" }, "optionalDependencies": { "@gpuix/native-darwin-arm64": "0.11.0", "@gpuix/native-linux-x64-gnu": "0.11.0", "@gpuix/native-win32-arm64-msvc": "0.11.0", "@gpuix/native-win32-x64-msvc": "0.11.0" } }, "sha512-xnPBArvvkg6aD7/soznkzio3qrKP6yHzhTJ0uOZoRYnp4OgdO8kkSKidAryvCbyF39/C0/+3P+7FzgsGTOXsXg=="],
 
