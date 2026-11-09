@@ -46,14 +46,14 @@ function Workshop() {
     <main>
       <span className="eyebrow">DESKFORM / WORKSHOP</span>
       <h1>Dial in the details.</h1>
-      <p>Use DialKit to tune the toolbar in the running native Snippets app.</p>
+      <p>Use DialKit to tune the toolbar in the running native application.</p>
       <div
         className="preview"
         style={{ minHeight: values.height, gap: values.gap, paddingInline: values.padding }}
       >
-        <strong>Snippets</strong>
+        <strong>Application toolbar</strong>
         <span>Native toolbar preview</span>
-        <button style={{ background: values.accent }}>New snippet</button>
+        <button style={{ background: values.accent }}>Action</button>
       </div>
       <p role="status">{status}</p>
       <pre>{JSON.stringify(values, null, 2)}</pre>

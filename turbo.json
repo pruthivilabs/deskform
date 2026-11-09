@@ -12,16 +12,6 @@
       "dependsOn": ["^typecheck"],
       "outputs": []
     },
-    "dev": {
-      "cache": false,
-      "persistent": true,
-      "env": ["DESKFORM_DATA_DIR"]
-    },
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
-      "cache": false
-    },
     "test:native": {
       "cache": false,
       "outputs": []
@@ -30,16 +20,30 @@
       "dependsOn": ["^test"],
       "outputs": []
     },
-    "dev:tools": {
+    "//#dev:fixture": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "passThroughEnv": ["DESKFORM_TUNING_FILE"]
     },
-    "test:production": {
-      "dependsOn": ["build"],
+    "//#dev:workshop": {
+      "cache": false,
+      "persistent": true,
+      "passThroughEnv": ["DESKFORM_TUNING_FILE", "DESKFORM_WORKSHOP_PORT"]
+    },
+    "//#build:fixture": {
+      "cache": false,
+      "outputs": ["output/deskform-fixture", "output/THIRD_PARTY_NOTICES.txt"]
+    },
+    "//#test:integration": {
       "cache": false,
       "outputs": []
     },
-    "test:devtools": {
+    "//#test:compiled": {
+      "dependsOn": ["//#build:fixture"],
+      "cache": false,
+      "outputs": []
+    },
+    "//#test:workshop": {
       "cache": false,
       "outputs": []
     }

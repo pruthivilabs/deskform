@@ -5,31 +5,19 @@
     "": {
       "name": "deskform",
       "devDependencies": {
-        "@types/bun": "1.4.4",
-        "@types/react": "19.3.0",
-        "tsrs": "0.22.0-ts7.1.0-beta",
-        "turbo": "2.11.10",
-        "vite-plus": "1.5.0",
-      },
-    },
-    "apps/snippets": {
-      "name": "@deskform/snippets",
-      "version": "0.1.0",
-      "dependencies": {
         "@deskform/runtime": "workspace:*",
         "@deskform/tokens": "workspace:*",
+        "@deskform/tooling": "workspace:*",
         "@deskform/ui": "workspace:*",
         "@gpuix/native": "0.11.0",
         "@gpuix/react": "0.11.0",
-        "react": "19.2.9",
-        "zod": "4.6.7",
-      },
-      "devDependencies": {
         "@playwright/test": "1.64.1",
-        "@types/react-dom": "19.3.0",
-        "dialkit": "2.1.0",
-        "motion": "14.9.1",
-        "react-dom": "19.2.9",
+        "@types/bun": "1.4.4",
+        "@types/react": "19.3.0",
+        "react": "19.2.9",
+        "tsrs": "0.22.0-ts7.1.0-beta",
+        "turbo": "2.11.10",
+        "vite-plus": "1.5.0",
       },
     },
     "packages/runtime": {
@@ -44,6 +32,27 @@
     "packages/tokens": {
       "name": "@deskform/tokens",
       "version": "0.1.0",
+    },
+    "packages/tooling": {
+      "name": "@deskform/tooling",
+      "version": "0.1.0",
+      "bin": {
+        "deskform": "./src/cli.ts",
+      },
+      "dependencies": {
+        "@deskform/tokens": "workspace:*",
+        "@gpuix/native": "0.11.0",
+        "@gpuix/react": "0.11.0",
+        "dialkit": "2.1.0",
+        "motion": "14.9.1",
+        "react": "19.2.9",
+        "react-dom": "19.2.9",
+        "vite-plus": "1.5.0",
+        "zod": "4.6.7",
+      },
+      "devDependencies": {
+        "@types/react-dom": "19.3.0",
+      },
     },
     "packages/ui": {
       "name": "@deskform/ui",
@@ -70,9 +79,9 @@
 
     "@deskform/runtime": ["@deskform/runtime@workspace:packages/runtime"],
 
-    "@deskform/snippets": ["@deskform/snippets@workspace:apps/snippets"],
-
     "@deskform/tokens": ["@deskform/tokens@workspace:packages/tokens"],
+
+    "@deskform/tooling": ["@deskform/tooling@workspace:packages/tooling"],
 
     "@deskform/ui": ["@deskform/ui@workspace:packages/ui"],
 

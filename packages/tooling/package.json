@@ -1,0 +1,37 @@
+{
+  "name": "@deskform/tooling",
+  "version": "0.1.0",
+  "private": true,
+  "bin": {
+    "deskform": "./src/cli.ts"
+  },
+  "files": [
+    "src",
+    "workshop"
+  ],
+  "type": "module",
+  "exports": {
+    "./build": "./src/build.ts",
+    "./tuning": "./src/tuning.ts",
+    "./toolbar": "./src/toolbar-values.ts",
+    "./vite": "./src/vite.ts"
+  },
+  "scripts": {
+    "typecheck": "tsrs --noEmit --fast -p tsconfig.json && tsrs --noEmit --fast -p workshop/tsconfig.json",
+    "test": "vp test run"
+  },
+  "dependencies": {
+    "@deskform/tokens": "workspace:*",
+    "@gpuix/native": "0.11.0",
+    "@gpuix/react": "0.11.0",
+    "dialkit": "2.1.0",
+    "motion": "14.9.1",
+    "react": "19.2.9",
+    "react-dom": "19.2.9",
+    "vite-plus": "1.5.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/react-dom": "19.3.0"
+  }
+}
