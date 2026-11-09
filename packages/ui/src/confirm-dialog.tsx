@@ -14,6 +14,7 @@ import { Row } from "./layout";
 import { Text } from "./text";
 
 export interface ConfirmDialogProps {
+  testId?: string;
   open: boolean;
   title: string;
   description: string;
@@ -23,6 +24,7 @@ export interface ConfirmDialogProps {
 }
 
 export function ConfirmDialog({
+  testId = "confirm-dialog",
   open,
   title,
   description,
@@ -37,6 +39,9 @@ export function ConfirmDialog({
         <DialogBackdrop style={{ backgroundColor: "#00000099" }} />
         <DialogPopup
           aria-label={title}
+          onKeyDown={(event) => {
+            if (event.key !== "escape") event.stopPropagation();
+          }}
           initialFocus={cancel}
           style={{
             width: 420,
@@ -56,10 +61,10 @@ export function ConfirmDialog({
             <Text tone="muted">{description}</Text>
           </DialogDescription>
           <Row style={{ justifyContent: "flex-end", marginTop: space.sm }}>
-            <Button ref={cancel} testId="cancel-delete" onPress={() => onOpenChange(false)}>
+            <Button ref={cancel} testId={`${testId}-cancel`} onPress={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button testId="confirm-delete" variant="danger" onPress={onConfirm}>
+            <Button testId={`${testId}-confirm`} variant="danger" onPress={onConfirm}>
               {confirmLabel}
             </Button>
           </Row>

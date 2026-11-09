@@ -24,6 +24,7 @@
       "name": "@deskform/runtime",
       "version": "0.1.0",
       "dependencies": {
+        "@deskform/ui": "workspace:*",
         "@gpuix/native": "0.11.0",
         "@gpuix/react": "0.11.0",
         "react": "19.2.9",

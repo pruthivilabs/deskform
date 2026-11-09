@@ -1,8 +1,18 @@
 import { color, space } from "@deskform/tokens";
-import { createCommands } from "@deskform/runtime";
-import { Button, Input, Shell, Stack, Text, Toolbar } from "@deskform/ui";
+import { createCommands, composeApplication } from "@deskform/runtime";
+import {
+  Button,
+  Input,
+  Sidebar,
+  SidebarSection,
+  NavigationItem,
+  Stack,
+  Text,
+  Toolbar,
+} from "@deskform/ui";
 import { useToolbarTuning } from "@deskform/tooling/tuning";
 import { useState } from "react";
+import { application } from "./application";
 
 export function Workbench({ tuningFile }: { tuningFile?: string }) {
   const [value, setValue] = useState("");
@@ -11,19 +21,11 @@ export function Workbench({ tuningFile }: { tuningFile?: string }) {
   const commands = createCommands([
     { id: "increment", shortcut: { key: "n" }, run: () => setCount((n) => n + 1) },
   ]);
-  return (
-    <Shell
-      onKeyDown={commands.onKeyDown}
-      sidebar={
-        <Stack style={{ padding: space.lg }}>
-          <Text size="heading">Framework fixture</Text>
-          <Button testId="action" onPress={() => commands.run("increment")}>
-            Run command
-          </Button>
-        </Stack>
-      }
-    >
+  return composeApplication(application, {
+    commands,
+    toolbar: (
       <Toolbar
+        aria-label="Application toolbar"
         testId="toolbar"
         style={{
           minHeight: toolbar.height,
@@ -32,12 +34,28 @@ export function Workbench({ tuningFile }: { tuningFile?: string }) {
           paddingRight: toolbar.padding,
         }}
       >
-        <Text size="label">Native verification surface</Text>
+        <Text size="label">Native framework workbench</Text>
       </Toolbar>
+    ),
+    sidebar: (
+      <Sidebar label="Library" testId="sidebar">
+        <SidebarSection title="Navigation">
+          <NavigationItem label="Overview" selected onSelect={() => {}} />
+          <NavigationItem label="Settings" onSelect={() => {}} />
+        </SidebarSection>
+        <SidebarSection title="Actions">
+          <Button testId="action" onPress={() => commands.run("increment")}>
+            Run command
+          </Button>
+        </SidebarSection>
+      </Sidebar>
+    ),
+    content: (
       <Stack
         gap={space.lg}
         style={{ padding: space.xl, flexGrow: 1, backgroundColor: color.canvas }}
       >
+        <Text size="heading">Consumer-owned content</Text>
         <Input
           autoFocus
           testId="input"
@@ -48,6 +66,6 @@ export function Workbench({ tuningFile }: { tuningFile?: string }) {
         <Text testId="echo">{value || "Empty input"}</Text>
         <Text testId="count">{String(count)}</Text>
       </Stack>
-    </Shell>
-  );
+    ),
+  }).element;
 }

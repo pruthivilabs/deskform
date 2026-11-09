@@ -1,24 +1,35 @@
-import { render, type RenderOptions } from "@gpuix/react";
+import { render, type KeyEvent } from "@gpuix/react";
 import type { ReactNode } from "react";
-
-export interface Application {
-  id: string;
-  name: string;
-  window: Pick<RenderOptions, "width" | "height" | "minWidth" | "minHeight">;
+import { AppFrame } from "@deskform/ui";
+import { applicationWindowOptions, type Application } from "./config";
+export { defineApplication, type Application } from "./config";
+export interface ApplicationPorts {
+  toolbar?: ReactNode;
+  sidebar?: ReactNode;
+  inspector?: ReactNode;
+  status?: ReactNode;
+  content: ReactNode;
+  commands?: { onKeyDown: (event: KeyEvent) => void };
 }
-
-export function defineApplication<const Definition extends Application>(
-  definition: Definition,
-): Definition {
-  return definition;
+export function composeApplication(application: Application, ports: ApplicationPorts) {
+  return {
+    application,
+    element: (
+      <AppFrame
+        role="application"
+        aria-label={application.name}
+        toolbar={ports.toolbar}
+        sidebar={ports.sidebar}
+        inspector={ports.inspector}
+        status={ports.status}
+        onKeyDown={ports.commands?.onKeyDown}
+      >
+        {ports.content}
+      </AppFrame>
+    ),
+  };
 }
-
-export function startApplication(application: Application, content: ReactNode) {
-  return render(content, {
-    ...application.window,
-    title: application.name,
-    appName: application.name,
-    tabNavigation: true,
-    keyboardFocusDim: false,
-  });
+export type ApplicationComposition = ReturnType<typeof composeApplication>;
+export function startApplication(composition: ApplicationComposition) {
+  return render(composition.element, applicationWindowOptions(composition.application));
 }

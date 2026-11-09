@@ -3,5 +3,14 @@ export { Input, Textarea, type InputProps, type TextareaProps } from "./fields";
 export { Row, Stack, type LayoutProps } from "./layout";
 export { Text, type TextProps } from "./text";
 export { style } from "./style";
-export { Shell, Toolbar, type ShellProps } from "./shell";
+export { AppFrame, Workspace, type AppFrameProps } from "./frame";
+export { Toolbar, type ToolbarProps } from "./toolbar";
+export {
+  Sidebar,
+  SidebarSection,
+  NavigationItem,
+  type SidebarProps,
+  type SidebarSectionProps,
+  type NavigationItemProps,
+} from "./sidebar";
 export { ConfirmDialog, type ConfirmDialogProps } from "./confirm-dialog";
