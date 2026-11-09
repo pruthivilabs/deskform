@@ -2,11 +2,15 @@
   "name": "@deskform/tokens",
   "version": "0.1.0",
   "private": true,
+  "files": [
+    "src"
+  ],
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
   "scripts": {
-    "typecheck": "tsrs --noEmit --fast -p tsconfig.json"
+    "typecheck": "tsrs --noEmit --fast -p tsconfig.json",
+    "pack": "bun pm pack --destination dist"
   }
 }

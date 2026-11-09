@@ -23,4 +23,6 @@ bun run dev
 
 Bun owns workspaces and the single lockfile; Turbo orchestrates tasks; Vite+ provides lint, formatting, portable tests and browser tooling; tsrs checks types. GPUix React/native are both pinned to 0.11.0. The verified graphics/build target is macOS arm64.
 
+To build an independent product, follow the [consumer setup](docs/consuming.md). `bun run test:consumer` verifies the packed packages outside this repository.
+
 Read [architecture](docs/architecture.md), [public APIs](docs/api.md), [development](docs/development.md), and [agent instructions](AGENTS.md).

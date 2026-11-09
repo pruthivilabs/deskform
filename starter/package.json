@@ -1,0 +1,30 @@
+{
+  "name": "my-desktop-utility",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsrs --noEmit --fast -p tsconfig.json",
+    "dev": "deskform dev src/main.tsx",
+    "dev:tools": "deskform devtools",
+    "build": "deskform build src/main.tsx --outfile dist/utility",
+    "test:native": "bun test tests/*.native.test.tsx"
+  },
+  "dependencies": {
+    "@deskform/runtime": "0.1.0",
+    "@deskform/tokens": "0.1.0",
+    "@deskform/ui": "0.1.0",
+    "@gpuix/native": "0.11.0",
+    "@gpuix/react": "0.11.0",
+    "react": "19.2.9"
+  },
+  "devDependencies": {
+    "@deskform/tooling": "0.1.0",
+    "@types/bun": "1.4.4",
+    "@types/react": "19.3.0",
+    "tsrs": "0.22.0-ts7.1.0-beta"
+  },
+  "overrides": {
+    "@gpuix/native": "0.11.0"
+  },
+  "packageManager": "bun@1.4.3"
+}

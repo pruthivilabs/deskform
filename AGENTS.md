@@ -14,6 +14,6 @@ Read `docs/architecture.md`, `docs/api.md` and `docs/development.md` before chan
 - Preserve upstream license/attribution when copying code. Architectural inspiration alone is recorded in `docs/architecture.md`.
 - Keep the public API small. Extract from an actual consumer; defer generators, plugins and schema engines.
 
-- Use `bun run check`, `bun run test`, `bun run test:native`, `bun run test:devtools`, and `bun run test:production` for the relevant surfaces. Chromium setup is `bun run test:devtools:install`.
+- Use `bun run check`, `bun run test`, `bun run test:native`, `bun run test:devtools`, and `bun run test:production` for the relevant surfaces. `bun run test:consumer` packs and installs the starter in a temporary independent project, then checks types, native behavior and its compiled executable. Chromium setup is `bun run test:devtools:install`.
 - The static-addon resolver in `packages/tooling/src/build.ts` is required for the verified standalone build. Keep its exports aligned with the pinned published GPUix package and retain generated dependency notices with distributed artifacts.
 - DialKit belongs to the browser workshop, not the GPUix tree. Keep its bridge local, validated, ignored by Git, and disabled in compiled production.

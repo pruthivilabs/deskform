@@ -45,6 +45,16 @@
     },
     "//#test:workshop": {
       "cache": false,
+      "outputs": [],
+      "dependsOn": ["@deskform/runtime#pack", "@deskform/tooling#pack"]
+    },
+    "pack": {
+      "dependsOn": ["^pack"],
+      "outputs": ["dist/*.tgz"]
+    },
+    "//#test:consumer:fixture": {
+      "dependsOn": ["@deskform/runtime#pack", "@deskform/tooling#pack"],
+      "cache": false,
       "outputs": []
     }
   }

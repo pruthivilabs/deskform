@@ -29,7 +29,14 @@ if (command === "build") {
 } else if (command === "devtools") {
   const vp = resolve(dirname(fileURLToPath(import.meta.resolve("vite-plus"))), "../bin/vp");
   await run(
-    [vp, "dev", "--config", fileURLToPath(new URL("./workshop-config.ts", import.meta.url))],
+    [
+      vp,
+      "dev",
+      "--configLoader",
+      "runner",
+      "--config",
+      fileURLToPath(new URL("./workshop-config.ts", import.meta.url)),
+    ],
     {
       ...process.env,
       DESKFORM_TUNING_FILE: process.env.DESKFORM_TUNING_FILE ?? resolve(".deskform/toolbar.json"),

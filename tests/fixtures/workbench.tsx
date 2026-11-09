@@ -35,6 +35,14 @@ export function Workbench({ tuningFile }: { tuningFile?: string }) {
         }}
       >
         <Text size="label">Native framework workbench</Text>
+        <Button
+          testId="toolbar-action"
+          variant="primary"
+          style={{ backgroundColor: toolbar.accent }}
+          onPress={() => commands.run("increment")}
+        >
+          Run command
+        </Button>
       </Toolbar>
     ),
     sidebar: (

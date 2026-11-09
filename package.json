@@ -23,7 +23,10 @@
     "dev:workshop": "deskform devtools",
     "test:compiled": "bun test tests/native/production.test.tsx",
     "test:workshop": "playwright test --config tests/workshop/playwright.config.ts",
-    "test:devtools:install": "playwright install chromium --no-shell"
+    "test:devtools:install": "playwright install chromium --no-shell",
+    "pack": "turbo run pack",
+    "test:consumer": "turbo run test:consumer:fixture --concurrency=1",
+    "test:consumer:fixture": "bun test tests/native/consumer.test.tsx"
   },
   "devDependencies": {
     "@deskform/runtime": "workspace:*",

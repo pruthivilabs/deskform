@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 const root = resolve(import.meta.dirname, "../..");
 export default defineConfig({
   testDir: ".",
-  testMatch: "toolbar.spec.ts",
+  testMatch: ["toolbar.spec.ts", "consumer.spec.ts"],
   workers: 1,
   timeout: 30_000,
   outputDir: "../../output/playwright",

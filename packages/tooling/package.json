@@ -18,7 +18,9 @@
   },
   "scripts": {
     "typecheck": "tsrs --noEmit --fast -p tsconfig.json && tsrs --noEmit --fast -p workshop/tsconfig.json",
-    "test": "vp test run"
+    "test": "vp test run",
+    "pack": "bun pm pack --destination dist",
+    "test:native": "bun test tests/*.native.test.tsx"
   },
   "dependencies": {
     "@deskform/tokens": "workspace:*",
@@ -26,12 +28,14 @@
     "@gpuix/react": "0.11.0",
     "dialkit": "2.1.0",
     "motion": "14.9.1",
-    "react": "19.2.9",
     "react-dom": "19.2.9",
     "vite-plus": "1.5.0",
     "zod": "4.6.7"
   },
   "devDependencies": {
     "@types/react-dom": "19.3.0"
+  },
+  "peerDependencies": {
+    "react": "19.2.9"
   }
 }

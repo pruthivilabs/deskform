@@ -22,7 +22,7 @@ These are architectural references. No Toolcraft or 1git implementation was copi
 | runtime | Application declarations/assembly and desktop commands  | ui where assembly requires it, GPUix, React |
 | tooling | Native build/development and browser tuning channel     | tokens, GPUix, Bun, Vite+, DialKit          |
 
-Consumer products own their models, search rules, feature state and storage schema. Framework packages never import products or test fixtures. Keep additional packages tied to a real responsibility and consumer. The current packages export TypeScript sources; they are not published to npm.
+Consumer products own their models, search rules, feature state and storage schema. Framework packages never import products or test fixtures. Keep additional packages tied to a real responsibility and consumer. The packages export TypeScript sources for Bun and are verified as local archives in an independent project; they are not published to npm. React is a peer dependency so controls use the consumer's React instance. The copyable `starter/` supplies composition and agent instructions without becoming a workspace product.
 
 ## Tooling and verification
 

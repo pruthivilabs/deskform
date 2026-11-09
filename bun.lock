@@ -27,6 +27,8 @@
         "@deskform/ui": "workspace:*",
         "@gpuix/native": "0.11.0",
         "@gpuix/react": "0.11.0",
+      },
+      "peerDependencies": {
         "react": "19.2.9",
       },
     },
@@ -46,13 +48,15 @@
         "@gpuix/react": "0.11.0",
         "dialkit": "2.1.0",
         "motion": "14.9.1",
-        "react": "19.2.9",
         "react-dom": "19.2.9",
         "vite-plus": "1.5.0",
         "zod": "4.6.7",
       },
       "devDependencies": {
         "@types/react-dom": "19.3.0",
+      },
+      "peerDependencies": {
+        "react": "19.2.9",
       },
     },
     "packages/ui": {
@@ -62,6 +66,8 @@
         "@deskform/tokens": "workspace:*",
         "@gpuix/native": "0.11.0",
         "@gpuix/react": "0.11.0",
+      },
+      "peerDependencies": {
         "react": "19.2.9",
       },
     },

@@ -6,7 +6,10 @@ import { defaultToolbar, toolbarSchema, type ToolbarValues } from "./toolbar-val
 export function useToolbarTuning(path?: string): ToolbarValues {
   const [values, setValues] = useState(defaultToolbar);
   useEffect(() => {
-    if (process.env.NODE_ENV === "production" || !path) return;
+    if (process.env.NODE_ENV === "production" || !path) {
+      setValues(defaultToolbar);
+      return;
+    }
     const file = resolve(path);
     const read = () => {
       try {

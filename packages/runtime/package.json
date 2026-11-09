@@ -2,6 +2,9 @@
   "name": "@deskform/runtime",
   "version": "0.1.0",
   "private": true,
+  "files": [
+    "src"
+  ],
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
@@ -10,12 +13,15 @@
   },
   "scripts": {
     "typecheck": "tsrs --noEmit --fast -p tsconfig.json",
-    "test": "vp test run"
+    "test": "vp test run",
+    "pack": "bun pm pack --destination dist"
   },
   "dependencies": {
     "@deskform/ui": "workspace:*",
     "@gpuix/native": "0.11.0",
-    "@gpuix/react": "0.11.0",
+    "@gpuix/react": "0.11.0"
+  },
+  "peerDependencies": {
     "react": "19.2.9"
   }
 }

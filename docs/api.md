@@ -10,7 +10,7 @@
 
 `@deskform/tooling/tuning` exports `useToolbarTuning(path)`; `@deskform/tooling/toolbar` supplies validated values/defaults. `@deskform/tooling/vite` exports `createWorkshopConfig({tuningFile,port})`. The channel path is explicit so a consumer can connect a native window and its browser workshop without product-specific conventions. Only development reads the channel.
 
-These packages are local workspace sources, not published registry releases. The consumer installation workflow is documented as it is verified; do not assume an npm package exists.
+These packages are local workspace sources, not published registry releases. Use the verified [local package installation workflow](consuming.md); do not assume an npm package exists.
 
 ## Native surfaces and composition
 
