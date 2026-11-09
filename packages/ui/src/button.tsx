@@ -32,6 +32,8 @@ export function Button({
       onClick={onPress}
       style={style(
         {
+          display: "flex",
+          flexDirection: "row",
           height: control.height,
           paddingLeft: space.md,
           paddingRight: space.md,
