@@ -26,17 +26,22 @@ test("controls activate with pointer, Enter and Space; disabled actions stay ine
   try {
     root.render(<Controls />);
     await app.getByTestId("action").click();
+    expect(await app.getByTestId("result").textContent()).toBe("1");
     await app.getByTestId("action").press("enter");
+    expect(await app.getByTestId("result").textContent()).toBe("2");
     const action = await app.getByTestId("action").element();
+    root.renderer.nativeSimulateKeyDown(action.id, "enter", true);
+    expect(await app.getByTestId("result").textContent()).toBe("2");
     root.renderer.nativeSimulateKeyDown(action.id, "space");
     expect(await app.getByTestId("result").textContent()).toBe("2");
     root.renderer.nativeSimulateKeyUp(action.id, "space");
     expect(await app.getByTestId("result").textContent()).toBe("3");
     await app.getByTestId("disabled").click();
+    expect(await app.getByTestId("result").textContent()).toBe("3");
     await app.getByTestId("disabled").press("enter");
     expect(await app.getByTestId("result").textContent()).toBe("3");
-    const labels = Object.values(root.renderer.getA11yTree().nodes ?? {}).map(
-      (node) => node.aria?.label,
+    const labels = Object.values(root.renderer.getA11yTree().nodes ?? {}).map((node) =>
+      node.aria?.role === "Button" ? node.aria.label : undefined,
     );
     expect(labels).toContain("Create");
     expect(labels).toContain("Delete");
@@ -65,17 +70,15 @@ test("native fields edit Unicode and multiline text, and Tab skips disabled cont
   }
   try {
     root.render(<Fields />);
+    const title = await app.getByTestId("title").element();
+    const body = await app.getByTestId("body").element();
     await app.getByTestId("title").fill("Café ☕");
     root.renderer.simulateKeystrokes("tab");
-    expect(root.renderer.getFocusedElementId()).toBe(
-      root.renderer.findByTestId("body")?.id ?? null,
-    );
+    expect(root.renderer.getFocusedElementId()).toBe(body.id);
     await app.getByTestId("body").fill("line one\nline two");
     expect(await app.getByTestId("result").textContent()).toBe("Café ☕|line one\nline two");
     root.renderer.simulateKeystrokes("shift-tab");
-    expect(root.renderer.getFocusedElementId()).toBe(
-      root.renderer.findByTestId("title")?.id ?? null,
-    );
+    expect(root.renderer.getFocusedElementId()).toBe(title.id);
   } finally {
     await app.close();
     root.unmount();
