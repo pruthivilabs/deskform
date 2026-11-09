@@ -7,7 +7,7 @@ import {
   type PublicInstance,
   type EventPayload,
 } from "@gpuix/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Stack } from "./layout";
 import { Text } from "./text";
 import { style } from "./style";
@@ -56,6 +56,9 @@ export function Sidebar({
     if (start && event.x !== undefined)
       resize(start.width + (event.x - start.x) * (side === "start" ? 1 : -1));
   };
+  useEffect(() => {
+    if (collapsed) gesture.current = null;
+  }, [collapsed]);
   if (collapsed) return null;
   return (
     <Stack
@@ -72,6 +75,8 @@ export function Sidebar({
           paddingRight: side === "start" ? 6 : 0,
           paddingLeft: side === "end" ? 6 : 0,
           backgroundColor: color.sidebar,
+          borderColor: color.border,
+          ...(side === "start" ? { borderRightWidth: 1 } : { borderLeftWidth: 1 }),
         },
         custom,
       )}
@@ -95,7 +100,7 @@ export function Sidebar({
           ...(side === "start" ? { right: 0 } : { left: 0 }),
           width: 6,
           cursor: "col-resize",
-          backgroundColor: color.border,
+          backgroundColor: "transparent",
           hover: { backgroundColor: color.surfaceHover },
           focusVisible: { backgroundColor: color.focus },
         }}
@@ -123,6 +128,7 @@ export function Sidebar({
             return;
           }
           if (
+            gesture.current ||
             event.modifiers?.cmd ||
             event.modifiers?.ctrl ||
             event.modifiers?.alt ||

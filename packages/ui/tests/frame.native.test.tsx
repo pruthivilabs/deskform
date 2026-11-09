@@ -135,3 +135,35 @@ test("confirmation contains commands and restores the opening control after Esca
     root.unmount();
   }
 });
+
+test("a pointer resize owns its gesture until release or Escape", async () => {
+  const root = createTestRoot({ width: 1000, height: 700, keyboardFocusDim: false });
+  const app = await connectTest(root.renderer);
+  try {
+    root.render(
+      <AppFrame
+        sidebar={
+          <Sidebar label="Pages" testId="nav" defaultWidth={260}>
+            <Text>Navigation</Text>
+          </Sidebar>
+        }
+      >
+        <Text>Content</Text>
+      </AppFrame>,
+    );
+    const box = await app.getByTestId("nav-resize").bounds();
+    const x = box.x + box.width / 2,
+      y = box.y + 30;
+    root.renderer.nativeSimulateMouseDown(x, y);
+    root.renderer.nativeSimulateMouseMove(x + 20, y, 0);
+    expect((await app.getByTestId("nav").bounds()).width).toBe(280);
+    await app.getByTestId("nav-resize").press("right");
+    expect((await app.getByTestId("nav").bounds()).width).toBe(280);
+    await app.getByTestId("nav-resize").press("escape");
+    expect((await app.getByTestId("nav").bounds()).width).toBe(260);
+    root.renderer.nativeSimulateMouseUp(x + 20, y);
+  } finally {
+    await app.close();
+    root.unmount();
+  }
+});
