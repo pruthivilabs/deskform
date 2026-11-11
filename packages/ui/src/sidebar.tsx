@@ -193,7 +193,7 @@ export function NavigationItem({
       onClick={onSelect}
       style={style(
         {
-          minHeight: 34,
+          minHeight: control.height,
           padding: space.sm,
           borderRadius: radius.md,
           borderWidth: 1,
