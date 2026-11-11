@@ -2,7 +2,7 @@
 
 `@deskform/tokens` exports `color`, `space`, `radius`, `type` and `control` in native logical pixels.
 
-`@deskform/ui` exports `Text`, `Button`, controlled `Input`/`Textarea`, `Row`, `Stack`, `AppFrame`, `Workspace`, `Sidebar`, `SidebarSection`, `NavigationItem`, `Toolbar`, `ConfirmDialog` and typed `style(...)`. Inputs require an accessible name. GPUix owns native editing, selection, focus traversal and overlay behavior. Buttons use `onPress`, string labels and native disabled behavior. `style` merges conditional layers and interaction states without a global registry.
+`@deskform/ui` exports `Text`, `Button`, controlled `Input`/`Textarea`, `Slider`, `Tabs`, `SettingsSection`, `Row`, `Stack`, `AppFrame`, `Workspace`, `Sidebar`, `SidebarSection`, `NavigationItem`, `Toolbar`, `ConfirmDialog` and typed `style(...)`. Inputs require an accessible name. GPUix owns native editing, selection, focus traversal and overlay behavior. Buttons use `onPress`, string labels and native disabled behavior. `style` merges conditional layers and interaction states without a global registry.
 
 `@deskform/runtime` exports typed `defineApplication`/`composeApplication`/`startApplication`, `createCommands` and `clipboard`. Commands also have a portable `@deskform/runtime/commands` entry point that does not load the native host. They enforce unique action/shortcut ownership, exact primary modifiers, disabled conditions, repeat handling and event cancellation. Product handlers remain consumer-owned. The clipboard adapter currently uses macOS `pbcopy` over stdin.
 
@@ -19,3 +19,7 @@ These packages are local workspace sources, not published registry releases. Use
 `composeApplication(application, {toolbar, sidebar, inspector, content, status, commands})` assembles those public slots. Its `.element` can be returned from a consumer React component, so feature state remains local. `startApplication({application, element:<App/>})` opens that component in the native host. Application declarations snapshot window settings, use `id` for the published native `appId`, and expose the published window-chrome options. Native `titlebarTransparent`/`windowBackground` are supported options; 1git's patched drag behavior is not supplied.
 
 `ConfirmDialog` now has generic default locator IDs `confirm-dialog-cancel` and `confirm-dialog-confirm`, configurable through `testId`. It owns modal command containment, initial Cancel focus and restoration; product action names are not embedded in the control.
+
+`Slider` is a controlled single-value control with a required label and `value`/`onChange`. Set `min`, `max`, `step` and `formatValue` for the setting; values snap relative to the minimum. Pointer clicks and dragging, arrow keys, Home and End change the value. `SettingsSection` groups labeled controls without owning their storage. The starter's layout settings last only for the current session; applications own persistence.
+
+`Tabs` takes labeled `{id, label}` options, the selected `value` and `onChange`. Pointer, arrow keys, Home and End select a view; the consumer renders its content. Use it when the product needs views, rather than requiring tabs in every shell.

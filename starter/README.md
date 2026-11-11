@@ -12,4 +12,4 @@ bun run test:native
 bun run build
 ```
 
-Give `src/application.ts` your product identity. Replace the empty content surface with your features; keep the framework's frame/sidebar/controls and the provided agent instructions. There is no generator or plugin system.
+Give `src/application.ts` your product identity. Replace the empty content surface with your features; keep the framework's frame/sidebar/controls and the provided agent instructions. Settings includes session-only examples of reusable numeric sliders. The product owns durable preferences. Optional tabs are available when a feature needs multiple views.

@@ -13,6 +13,8 @@ Source inspected on 2026-11-05 and revisited for the framework sprint on 2026-11
 
 These are architectural references. No Toolcraft or 1git implementation was copied. Retain notices for any future reused source. The native build emits the installed framework dependency licenses with its executable.
 
+[Fluid Functionalism](https://www.fluidfunctionalism.com/) informs the native visual direction: neutral nested surfaces, a shared control rhythm, concise typography, clear selection and keyboard access. GPUix implementations are independently written and do not reproduce its browser components. Its motion, full surface ladder and theme switching are not yet implemented.
+
 ## Package boundaries
 
 | Package | Owns                                                    | Depends on                                  |
