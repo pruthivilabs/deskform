@@ -21,6 +21,7 @@ import { application } from "./application";
 export function App() {
   const [page, setPage] = useState("Workspace");
   const [sidebarWidth, setSidebarWidth] = useState(290);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [contentPadding, setContentPadding] = useState(24);
   const [appearance, setAppearance] = useState<Appearance>("dark");
   const windowSize = useWindowSize();
@@ -45,6 +46,13 @@ export function App() {
       >
         <Text size="label">{application.name}</Text>
         <Button
+          variant="ghost"
+          testId="toggle-sidebar"
+          onPress={() => setSidebarOpen((open) => !open)}
+        >
+          {sidebarOpen ? "Hide sidebar" : "Show sidebar"}
+        </Button>
+        <Button
           variant="primary"
           style={appearance === "dark" ? { backgroundColor: tuning.accent } : undefined}
           onPress={() => commands.run("workspace")}
@@ -54,7 +62,12 @@ export function App() {
       </Toolbar>
     ),
     sidebar: (
-      <Sidebar label="Main navigation" width={sidebarWidth} onWidthChange={setSidebarWidth}>
+      <Sidebar
+        label="Main navigation"
+        width={sidebarWidth}
+        onWidthChange={setSidebarWidth}
+        collapsed={!sidebarOpen}
+      >
         <SidebarSection title="Application">
           <NavigationItem
             testId="workspace"
