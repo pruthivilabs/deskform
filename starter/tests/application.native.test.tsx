@@ -9,6 +9,9 @@ test("navigation and keyboard commands change the visible page", async () => {
     root.render(<App />);
     await app.getByTestId("settings").click();
     expect(await app.getByTestId("page-title").textContent()).toBe("Settings");
+    await app.getByTestId("sidebar-width").press("left");
+    expect(await app.getByTestId("sidebar-width-value").textContent()).toBe("280 px");
+    expect((await app.getByTestId("sidebar").bounds()).width).toBe(280);
     await app.getByTestId("settings").press("cmd-1");
     expect(await app.getByTestId("page-title").textContent()).toBe("Workspace");
   } finally {

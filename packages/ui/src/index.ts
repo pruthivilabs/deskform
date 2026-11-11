@@ -1,5 +1,6 @@
 export { Button, type ButtonProps } from "./button";
 export { Slider, type SliderProps } from "./slider";
+export { SettingsSection, type SettingsSectionProps } from "./settings";
 export { Input, Textarea, type InputProps, type TextareaProps } from "./fields";
 export { Row, Stack, type LayoutProps } from "./layout";
 export { Text, type TextProps } from "./text";
