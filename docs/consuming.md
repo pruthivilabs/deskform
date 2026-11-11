@@ -4,6 +4,20 @@ The monorepo is Deskform's development home. Consumer products do not become pac
 
 Deskform 0.1.0 is currently unpublished. Use the locally packed artifacts and overrides below. The overrides are required: Bun otherwise attempts to resolve transitive `@deskform/*@0.1.0` references from npm, where these packages do not exist.
 
+For a new project, the checkout can prepare the starter and copy the current package archives into the project itself:
+
+```sh
+bun install --frozen-lockfile
+bun run create /path/to/my-utility
+cd /path/to/my-utility
+bun install
+bun run dev
+```
+
+The destination must not already exist. Keep `vendor/` with the project: its local archives make the generated manifest independent of the Deskform checkout. Third-party packages still require installation. This is a local checkout command, not an npm-hosted initializer.
+
+Alternatively, to manage local archives yourself:
+
 ```sh
 # Inside the Deskform checkout
 bun install --frozen-lockfile

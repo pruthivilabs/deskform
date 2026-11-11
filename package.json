@@ -10,6 +10,7 @@
     "check:repo": "vp check",
     "typecheck:repo": "tsrs --noEmit --fast -p tsconfig.json",
     "format": "vp fmt",
+    "create": "bun scripts/create.ts",
     "dev": "turbo run dev:fixture",
     "build": "turbo run build:fixture",
     "test:native": "turbo run test:native test:integration --concurrency=1",
