@@ -2,6 +2,7 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildNativeApplication } from "./build";
+import { buildMacBundle } from "./bundle";
 
 const [command, entrypoint, ...args] = process.argv.slice(2);
 function valueAfter(flag: string): string | undefined {
@@ -14,7 +15,17 @@ async function run(args: string[], env = process.env): Promise<void> {
   process.on("SIGTERM", () => child.kill("SIGTERM"));
   process.exitCode = await child.exited;
 }
-if (command === "build") {
+if (command === "bundle") {
+  const outfile = valueAfter("--outfile");
+  const name = valueAfter("--name");
+  const id = valueAfter("--id");
+  const icon = valueAfter("--icon");
+  if (!entrypoint || !outfile || !name || !id || !icon)
+    throw new Error(
+      "Usage: deskform bundle <entry.tsx> --outfile <name.app> --name <name> --id <bundle-id> --icon <icon.icns>",
+    );
+  await buildMacBundle({ entrypoint, outfile, name, id, icon });
+} else if (command === "build") {
   const outfile = valueAfter("--outfile");
   if (!entrypoint || !outfile)
     throw new Error("Usage: deskform build <entry.tsx> --outfile <executable>");
@@ -43,6 +54,6 @@ if (command === "build") {
     },
   );
 } else {
-  process.stderr.write("Usage: deskform <build|dev|devtools> [entry.tsx] [--outfile executable]\n");
+  process.stderr.write("Usage: deskform <build|bundle|dev|devtools> [entry.tsx] [options]\n");
   process.exitCode = 1;
 }

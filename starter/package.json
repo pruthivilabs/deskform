@@ -7,6 +7,7 @@
     "dev": "deskform dev src/main.tsx",
     "dev:tools": "deskform devtools",
     "build": "deskform build src/main.tsx --outfile dist/utility",
+    "bundle": "deskform bundle src/main.tsx --outfile dist/MyUtility.app --name 'My Utility' --id dev.example.utility --icon assets/AppIcon.icns",
     "test:native": "bun test tests/*.native.test.tsx"
   },
   "dependencies": {
