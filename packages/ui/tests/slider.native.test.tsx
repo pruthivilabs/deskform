@@ -40,6 +40,26 @@ test("slider changes a controlled value with keyboard and pointer", async () => 
       bounds.y + bounds.height / 2,
     );
     expect(await app.getByTestId("opacity-value").textContent()).toBe("30%");
+    await app.getByTestId("opacity").dragBy(bounds.width * 0.3, 0);
+    expect(await app.getByTestId("opacity-value").textContent()).toBe("80%");
+  } finally {
+    await app.close();
+    root.unmount();
+  }
+});
+
+test("disabled sliders ignore pointer and keyboard input", async () => {
+  const root = createTestRoot({ width: 400, height: 200, keyboardFocusDim: false });
+  const app = await connectTest(root.renderer);
+  function Fixture() {
+    const [value, setValue] = useState(50);
+    return <Slider label="Disabled" testId="disabled" value={value} onChange={setValue} disabled />;
+  }
+  try {
+    root.render(<Fixture />);
+    await app.getByTestId("disabled").click();
+    await app.getByTestId("disabled").press("right");
+    expect(await app.getByTestId("disabled-value").textContent()).toBe("50");
   } finally {
     await app.close();
     root.unmount();
