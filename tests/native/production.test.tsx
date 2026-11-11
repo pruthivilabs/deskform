@@ -26,10 +26,55 @@ test("the framework-built executable works outside the checkout", async () => {
 
 test("a macOS bundle carries the requested icon and runs its executable", async () => {
   const directory = mkdtempSync(join(tmpdir(), "deskform-bundle-"));
-  const icon =
+  const systemIcon =
     "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/GenericApplicationIcon.icns";
+  const image = join(directory, "source.png");
+  const icon = join(directory, "icons/AppIcon.icns");
   const bundle = join(directory, "dist/Example.app");
   try {
+    const makeImage = Bun.spawnSync([
+      "/usr/bin/sips",
+      "-s",
+      "format",
+      "png",
+      "-z",
+      "512",
+      "512",
+      systemIcon,
+      "--out",
+      image,
+    ]);
+    expect(makeImage.exitCode).toBe(0);
+    const makeIcon = Bun.spawnSync([
+      process.execPath,
+      resolve("packages/tooling/src/cli.ts"),
+      "icon",
+      image,
+      "--outfile",
+      icon,
+    ]);
+    expect(makeIcon.exitCode).toBe(0);
+    const unpack = Bun.spawnSync([
+      "/usr/bin/iconutil",
+      "--convert",
+      "iconset",
+      "--output",
+      join(directory, "verify.iconset"),
+      icon,
+    ]);
+    expect(unpack.exitCode).toBe(0);
+    expect(
+      readFileSync(join(directory, "verify.iconset/icon_512x512@2x.png")).length,
+    ).toBeGreaterThan(0);
+    const repeat = Bun.spawnSync([
+      process.execPath,
+      resolve("packages/tooling/src/cli.ts"),
+      "icon",
+      image,
+      "--outfile",
+      icon,
+    ]);
+    expect(repeat.exitCode).not.toBe(0);
     const command = Bun.spawn(
       [
         process.execPath,

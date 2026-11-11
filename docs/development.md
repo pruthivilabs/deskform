@@ -29,7 +29,7 @@ The browser tests own separate servers on ports 4327 and 4328 and disposable tes
 
 Root `build` compiles the neutral fixture; consumers use `deskform build <entry.tsx> --outfile <path>`. Keep its generated `THIRD_PARTY_NOTICES.txt` with distributed binaries. The first supported build target is macOS arm64. Signing, notarization, installers, other clipboard backends and other platform builds are not implemented.
 
-For a Finder application and Dock icon, use `deskform bundle <entry.tsx> --outfile <name.app> --name <name> --id <bundle-id> --icon <file.icns>`. The consumer supplies the icon; the bundle embeds it and the dependency notices. The output is unsigned and the command refuses to overwrite an existing bundle. This does not change the icon of an unbundled development process.
+For a Finder application and Dock icon, use `deskform icon <square.png> --outfile <file.icns>` to convert a PNG of at least 512 × 512 pixels using macOS `sips` and `iconutil`. Prefer 1024 × 1024 for the largest representation. Then use `deskform bundle <entry.tsx> --outfile <name.app> --name <name> --id <bundle-id> --icon <file.icns>`. The consumer supplies the icon; the bundle embeds it and the dependency notices. The output is unsigned and the commands refuse to overwrite existing outputs. This does not change the icon of an unbundled development process.
 
 GPUix needs native JSX types (`jsxImportSource: "@gpuix/react"`). Its styles use logical pixels and `flexGrow`, not arbitrary DOM/CSS APIs. GPUix automation's `press()` emits key-down; Space activation tests must send explicit key-down and key-up. Graphics tests need access to the actual desktop session and may fail inside a sandbox.
 

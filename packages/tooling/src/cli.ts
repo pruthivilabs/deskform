@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildNativeApplication } from "./build";
 import { buildMacBundle } from "./bundle";
+import { createMacIcon } from "./icon";
 
 const [command, entrypoint, ...args] = process.argv.slice(2);
 function valueAfter(flag: string): string | undefined {
@@ -15,7 +16,12 @@ async function run(args: string[], env = process.env): Promise<void> {
   process.on("SIGTERM", () => child.kill("SIGTERM"));
   process.exitCode = await child.exited;
 }
-if (command === "bundle") {
+if (command === "icon") {
+  const outfile = valueAfter("--outfile");
+  if (!entrypoint || !outfile)
+    throw new Error("Usage: deskform icon <square.png> --outfile <icon.icns>");
+  createMacIcon(entrypoint, outfile);
+} else if (command === "bundle") {
   const outfile = valueAfter("--outfile");
   const name = valueAfter("--name");
   const id = valueAfter("--id");
@@ -54,6 +60,6 @@ if (command === "bundle") {
     },
   );
 } else {
-  process.stderr.write("Usage: deskform <build|bundle|dev|devtools> [entry.tsx] [options]\n");
+  process.stderr.write("Usage: deskform <build|bundle|icon|dev|devtools> [entry.tsx] [options]\n");
   process.exitCode = 1;
 }
