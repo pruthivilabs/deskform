@@ -127,6 +127,7 @@ export function Slider({
         }}
       >
         <div
+          testId={`${testId}-rail`}
           style={{
             height: 4,
             borderRadius: radius.sm,
@@ -138,16 +139,19 @@ export function Slider({
           style={{
             position: "absolute",
             left: 0,
-            top: 12,
+            top: 0,
             height: 4,
             width: `${((current - min) / (max - min)) * 100}%`,
             borderRadius: radius.sm,
             backgroundColor: color.accent,
             pointerEvents: "none",
-            alignItems: "flex-end",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
           }}
         >
           <div
+            testId={`${testId}-thumb`}
             style={{
               width: 12,
               height: 12,

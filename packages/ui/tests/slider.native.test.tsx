@@ -42,6 +42,10 @@ test("slider changes a controlled value with keyboard and pointer", async () => 
     expect(await app.getByTestId("opacity-value").textContent()).toBe("30%");
     await app.getByTestId("opacity").dragBy(bounds.width * 0.3, 0);
     expect(await app.getByTestId("opacity-value").textContent()).toBe("80%");
+    const thumb = await app.getByTestId("opacity-thumb").bounds();
+    const rail = await app.getByTestId("opacity-rail").bounds();
+    expect(Math.abs(thumb.y + thumb.height / 2 - (rail.y + rail.height / 2))).toBeLessThan(2);
+    expect(Math.abs(thumb.x + thumb.width / 2 - (rail.x + rail.width * 0.8))).toBeLessThan(2);
   } finally {
     await app.close();
     root.unmount();
