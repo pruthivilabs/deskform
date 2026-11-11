@@ -1,4 +1,5 @@
-import { color, control, radius, space, type } from "@deskform/tokens";
+import { control, radius, space, type, type Palette } from "@deskform/tokens";
+import { usePalette } from "./appearance";
 import type {
   InputProps as NativeInputProps,
   TextareaProps as NativeTextareaProps,
@@ -16,7 +17,7 @@ export type InputProps = Omit<NativeInputProps, "value" | "onChange" | "children
 export type TextareaProps = Omit<NativeTextareaProps, "value" | "onChange" | "children"> &
   Controlled;
 
-const field: StyleDesc = {
+const field = (color: Palette): StyleDesc => ({
   ...type.body,
   minWidth: 0,
   padding: space.sm,
@@ -27,7 +28,7 @@ const field: StyleDesc = {
   color: color.text,
   cursor: "text",
   focusVisible: { borderColor: color.focus },
-};
+});
 
 export function Input({
   value,
@@ -39,6 +40,7 @@ export function Input({
   theme,
   ...props
 }: InputProps) {
+  const color = usePalette();
   return (
     <input
       {...props}
@@ -46,7 +48,7 @@ export function Input({
       readOnly={readOnly || disabled}
       tabIndex={disabled ? -1 : tabIndex}
       theme={{ caret: color.focus, ...theme }}
-      style={style(field, { height: control.height }, custom, disabled && { opacity: 0.4 })}
+      style={style(field(color), { height: control.height }, custom, disabled && { opacity: 0.4 })}
       onChange={(event) => {
         if (!disabled && event.value !== undefined) onValueChange(event.value);
       }}
@@ -66,6 +68,7 @@ export function Textarea({
   maxRows = 40,
   ...props
 }: TextareaProps) {
+  const color = usePalette();
   return (
     <textarea
       {...props}
@@ -75,7 +78,7 @@ export function Textarea({
       minRows={minRows}
       maxRows={maxRows}
       theme={{ caret: color.focus, ...theme }}
-      style={style(field, type.code, custom, disabled && { opacity: 0.4 })}
+      style={style(field(color), type.code, custom, disabled && { opacity: 0.4 })}
       onChange={(event) => {
         if (!disabled && event.value !== undefined) onValueChange(event.value);
       }}

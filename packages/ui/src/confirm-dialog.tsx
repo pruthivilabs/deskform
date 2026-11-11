@@ -1,4 +1,5 @@
-import { color, radius, space } from "@deskform/tokens";
+import { radius, space } from "@deskform/tokens";
+import { usePalette } from "./appearance";
 import {
   Dialog,
   DialogBackdrop,
@@ -32,6 +33,7 @@ export function ConfirmDialog({
   onOpenChange,
   onConfirm,
 }: ConfirmDialogProps) {
+  const color = usePalette();
   const cancel = useRef<PublicInstance>(null);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

@@ -1,4 +1,5 @@
-import { color, control, radius, space } from "@deskform/tokens";
+import { control, radius, space } from "@deskform/tokens";
+import { usePalette } from "./appearance";
 import {
   Button as NativeButton,
   useGpuixRequired,
@@ -37,6 +38,7 @@ export function Sidebar({
   testId = "sidebar",
   ...props
 }: SidebarProps) {
+  const color = usePalette();
   const renderer = useGpuixRequired();
   const window = useWindowSize();
   const [localWidth, setLocalWidth] = useState(defaultWidth);
@@ -183,6 +185,7 @@ export function NavigationItem({
   style: custom,
   ...props
 }: NavigationItemProps) {
+  const color = usePalette();
   return (
     <NativeButton
       {...props}

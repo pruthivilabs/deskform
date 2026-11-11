@@ -1,4 +1,5 @@
-import { color, control, radius, space } from "@deskform/tokens";
+import { control, radius, space } from "@deskform/tokens";
+import { usePalette } from "./appearance";
 import {
   Button as NativeButton,
   type ButtonProps as NativeButtonProps,
@@ -22,6 +23,7 @@ export function Button({
   style: custom,
   ...props
 }: ButtonProps) {
+  const color = usePalette();
   const primary = variant === "primary";
   return (
     <NativeButton

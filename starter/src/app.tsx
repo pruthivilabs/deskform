@@ -9,6 +9,9 @@ import {
   Stack,
   Slider,
   SettingsSection,
+  AppearanceProvider,
+  Tabs,
+  type Appearance,
 } from "@deskform/ui";
 import { space } from "@deskform/tokens";
 import { useToolbarTuning } from "@deskform/tooling/tuning";
@@ -19,6 +22,7 @@ export function App() {
   const [page, setPage] = useState("Workspace");
   const [sidebarWidth, setSidebarWidth] = useState(290);
   const [contentPadding, setContentPadding] = useState(24);
+  const [appearance, setAppearance] = useState<Appearance>("dark");
   const windowSize = useWindowSize();
   const maxSidebarWidth = Math.max(181, Math.min(400, windowSize.width * 0.45));
   const tuning = useToolbarTuning(process.env.DESKFORM_TUNING_FILE);
@@ -26,7 +30,7 @@ export function App() {
     { id: "workspace", shortcut: { key: "1" }, run: () => setPage("Workspace") },
     { id: "settings", shortcut: { key: "2" }, run: () => setPage("Settings") },
   ]);
-  return composeApplication(application, {
+  const composition = composeApplication(application, {
     commands,
     toolbar: (
       <Toolbar
@@ -42,7 +46,7 @@ export function App() {
         <Text size="label">{application.name}</Text>
         <Button
           variant="primary"
-          style={{ backgroundColor: tuning.accent }}
+          style={appearance === "dark" ? { backgroundColor: tuning.accent } : undefined}
           onPress={() => commands.run("workspace")}
         >
           Workspace
@@ -73,32 +77,49 @@ export function App() {
           {page}
         </Text>
         {page === "Settings" ? (
-          <SettingsSection title="Layout" description="Adjust the workspace for this session.">
-            <Slider
-              label="Sidebar width"
-              testId="sidebar-width"
-              value={Math.min(sidebarWidth, maxSidebarWidth)}
-              onChange={setSidebarWidth}
-              min={180}
-              max={maxSidebarWidth}
-              step={10}
-              formatValue={(value) => `${value} px`}
-            />
-            <Slider
-              label="Content padding"
-              testId="content-padding"
-              value={contentPadding}
-              onChange={setContentPadding}
-              min={8}
-              max={48}
-              step={4}
-              formatValue={(value) => `${value} px`}
-            />
-          </SettingsSection>
+          <>
+            <SettingsSection title="Appearance" description="Changes apply for this session.">
+              <Tabs
+                label="Appearance"
+                testId="appearance"
+                value={appearance}
+                onChange={(value) => {
+                  if (value === "light" || value === "dark") setAppearance(value);
+                }}
+                tabs={[
+                  { id: "dark", label: "Dark" },
+                  { id: "light", label: "Light" },
+                ]}
+              />
+            </SettingsSection>
+            <SettingsSection title="Layout" description="Adjust the workspace for this session.">
+              <Slider
+                label="Sidebar width"
+                testId="sidebar-width"
+                value={Math.min(sidebarWidth, maxSidebarWidth)}
+                onChange={setSidebarWidth}
+                min={180}
+                max={maxSidebarWidth}
+                step={10}
+                formatValue={(value) => `${value} px`}
+              />
+              <Slider
+                label="Content padding"
+                testId="content-padding"
+                value={contentPadding}
+                onChange={setContentPadding}
+                min={8}
+                max={48}
+                step={4}
+                formatValue={(value) => `${value} px`}
+              />
+            </SettingsSection>
+          </>
         ) : (
           <Text tone="muted">Your application content belongs here.</Text>
         )}
       </Stack>
     ),
-  }).element;
+  });
+  return <AppearanceProvider appearance={appearance}>{composition.element}</AppearanceProvider>;
 }

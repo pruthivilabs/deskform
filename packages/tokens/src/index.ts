@@ -18,6 +18,27 @@ export const color = {
   success: "#b0d8be",
 } as const;
 
+export type Palette = { readonly [Key in keyof typeof color]: string };
+export const lightColor: Palette = {
+  canvas: "#ffffff",
+  sidebar: "#f5f5f5",
+  surface: "#ffffff",
+  surfaceHover: "#ededed",
+  surfacePressed: "#e2e2e2",
+  field: "#ffffff",
+  border: "#c5c5c5",
+  text: "#202020",
+  muted: "#626262",
+  faint: "#696969",
+  accent: "#315ca8",
+  accentHover: "#284e90",
+  onAccent: "#ffffff",
+  selected: "#e2e2e2",
+  focus: "#315ca8",
+  danger: "#a22929",
+  success: "#27643e",
+};
+
 export const space = { none: 0, xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32 } as const;
 export const radius = { sm: 5, md: 8, lg: 12 } as const;
 export const type = {

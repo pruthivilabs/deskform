@@ -1,6 +1,6 @@
 # Framework APIs
 
-`@deskform/tokens` exports `color`, `space`, `radius`, `type` and `control` in native logical pixels.
+`@deskform/tokens` exports dark `color`, `lightColor`, `space`, `radius`, `type` and `control` in native logical pixels.
 
 `@deskform/ui` exports `Text`, `Button`, controlled `Input`/`Textarea`, `Slider`, `Tabs`, `SettingsSection`, `Row`, `Stack`, `AppFrame`, `Workspace`, `Sidebar`, `SidebarSection`, `NavigationItem`, `Toolbar`, `ConfirmDialog` and typed `style(...)`. Inputs require an accessible name. GPUix owns native editing, selection, focus traversal and overlay behavior. Buttons use `onPress`, string labels and native disabled behavior. `style` merges conditional layers and interaction states without a global registry.
 
@@ -23,3 +23,5 @@ These packages are local workspace sources, not published registry releases. Use
 `Slider` is a controlled single-value control with a required label and `value`/`onChange`. Set `min`, `max`, `step` and `formatValue` for the setting; values snap relative to the minimum. Pointer clicks and dragging, arrow keys, Home and End change the value. `SettingsSection` groups labeled controls without owning their storage. The starter's layout settings last only for the current session; applications own persistence.
 
 `Tabs` takes labeled `{id, label}` options, the selected `value` and `onChange`. Pointer, arrow keys, Home and End select a view; the consumer renders its content. Use it when the product needs views, rather than requiring tabs in every shell.
+
+Wrap the application tree in `AppearanceProvider` with `appearance="dark"` or `appearance="light"` to change the framework surfaces and controls together. `usePalette()` exposes the matching semantic colors for consumer components. Without a provider the default is dark. The starter lets people switch appearances for the current session; applications own persistence and system appearance detection.

@@ -1,4 +1,5 @@
-import { color, control, radius, space } from "@deskform/tokens";
+import { control, radius, space } from "@deskform/tokens";
+import { usePalette } from "./appearance";
 import { buttonProps, useGpuixRequired, type PublicInstance } from "@gpuix/react";
 import { useRef } from "react";
 import { Text } from "./text";
@@ -17,6 +18,7 @@ export interface TabsProps {
 
 /** Controlled navigation for optional views. The consumer owns the selected content. */
 export function Tabs({ label, tabs, value, onChange, testId = "tabs" }: TabsProps) {
+  const color = usePalette();
   const renderer = useGpuixRequired();
   const refs = useRef(new Map<string, PublicInstance>());
   return (

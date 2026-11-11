@@ -1,4 +1,5 @@
-import { color, radius, space } from "@deskform/tokens";
+import { radius, space } from "@deskform/tokens";
+import { usePalette } from "./appearance";
 import { useGpuixRequired, type EventPayload, type PublicInstance } from "@gpuix/react";
 import { useRef } from "react";
 import { Stack } from "./layout";
@@ -28,6 +29,7 @@ export function Slider({
   formatValue = String,
   testId = "slider",
 }: SliderProps) {
+  const color = usePalette();
   const renderer = useGpuixRequired();
   const track = useRef<PublicInstance>(null);
   const dragging = useRef(false);

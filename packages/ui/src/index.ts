@@ -1,4 +1,5 @@
 export { Button, type ButtonProps } from "./button";
+export { AppearanceProvider, usePalette, type Appearance } from "./appearance";
 export { Slider, type SliderProps } from "./slider";
 export { SettingsSection, type SettingsSectionProps } from "./settings";
 export { Tabs, type TabsProps, type TabOption } from "./tabs";

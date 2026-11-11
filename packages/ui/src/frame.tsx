@@ -1,4 +1,5 @@
-import { color, radius, space } from "@deskform/tokens";
+import { radius, space } from "@deskform/tokens";
+import { usePalette } from "./appearance";
 import type { Props } from "@gpuix/react";
 import type { ReactNode } from "react";
 import { Row, Stack } from "./layout";
@@ -11,6 +12,7 @@ export interface AppFrameProps extends Props {
   status?: ReactNode;
 }
 export function Workspace({ style: custom, ...props }: Props) {
+  const color = usePalette();
   return (
     <Stack
       {...props}
@@ -28,6 +30,7 @@ export function AppFrame({
   style: custom,
   ...props
 }: AppFrameProps) {
+  const color = usePalette();
   return (
     <Stack
       {...props}

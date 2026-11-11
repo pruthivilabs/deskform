@@ -1,4 +1,5 @@
-import { color, control, space } from "@deskform/tokens";
+import { control, space } from "@deskform/tokens";
+import { usePalette } from "./appearance";
 import type { Props } from "@gpuix/react";
 import { Row } from "./layout";
 import { style } from "./style";
@@ -6,6 +7,7 @@ export interface ToolbarProps extends Props {
   "aria-label": string;
 }
 export function Toolbar({ children, style: custom, ...props }: ToolbarProps) {
+  const color = usePalette();
   return (
     <Row
       {...props}

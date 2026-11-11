@@ -1,4 +1,5 @@
-import { color, type } from "@deskform/tokens";
+import { type } from "@deskform/tokens";
+import { usePalette } from "./appearance";
 import type { Props } from "@gpuix/react";
 import { style } from "./style";
 
@@ -15,6 +16,7 @@ export function Text({
   style: custom,
   ...props
 }: TextProps) {
+  const color = usePalette();
   return (
     <text
       {...props}
