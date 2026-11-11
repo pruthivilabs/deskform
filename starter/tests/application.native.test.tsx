@@ -19,3 +19,18 @@ test("navigation and keyboard commands change the visible page", async () => {
     root.unmount();
   }
 });
+
+test("sidebar setting reflects the available window width", async () => {
+  const root = createTestRoot({ width: 760, height: 500, keyboardFocusDim: false });
+  const app = await connectTest(root.renderer);
+  try {
+    root.render(<App />);
+    await app.getByTestId("settings").click();
+    await app.getByTestId("sidebar-width").press("end");
+    expect(await app.getByTestId("sidebar-width-value").textContent()).toBe("342 px");
+    expect((await app.getByTestId("sidebar").bounds()).width).toBe(342);
+  } finally {
+    await app.close();
+    root.unmount();
+  }
+});

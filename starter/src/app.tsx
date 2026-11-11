@@ -13,11 +13,14 @@ import {
 import { space } from "@deskform/tokens";
 import { useToolbarTuning } from "@deskform/tooling/tuning";
 import { useState } from "react";
+import { useWindowSize } from "@gpuix/react";
 import { application } from "./application";
 export function App() {
   const [page, setPage] = useState("Workspace");
   const [sidebarWidth, setSidebarWidth] = useState(290);
   const [contentPadding, setContentPadding] = useState(24);
+  const windowSize = useWindowSize();
+  const maxSidebarWidth = Math.max(181, Math.min(400, windowSize.width * 0.45));
   const tuning = useToolbarTuning(process.env.DESKFORM_TUNING_FILE);
   const commands = createCommands([
     { id: "workspace", shortcut: { key: "1" }, run: () => setPage("Workspace") },
@@ -74,10 +77,10 @@ export function App() {
             <Slider
               label="Sidebar width"
               testId="sidebar-width"
-              value={sidebarWidth}
+              value={Math.min(sidebarWidth, maxSidebarWidth)}
               onChange={setSidebarWidth}
               min={180}
-              max={400}
+              max={maxSidebarWidth}
               step={10}
               formatValue={(value) => `${value} px`}
             />
